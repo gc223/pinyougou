@@ -1,5 +1,5 @@
  //控制层 
-app.controller('goodsController' ,function($scope,$controller   ,goodsService){	
+app.controller('goodsController' ,function($scope,$controller,goodsService,uploadService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -33,19 +33,24 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService){
 	
 	//保存 
 	$scope.save=function(){				
-		var serviceObject;//服务层对象  				
+		var serviceObject;//服务层对象
+		$scope.entity.goodsDesc.introduction=editor.html();
 		if($scope.entity.id!=null){//如果有ID
 			serviceObject=goodsService.update( $scope.entity ); //修改  
 		}else{
-			serviceObject=goodsService.add( $scope.entity  );//增加 
+			serviceObject=goodsService.add( $scope.entity  );//增加
+
 		}				
 		serviceObject.success(
 			function(response){
 				if(response.success){
 					//重新查询 
 		        	$scope.reloadList();//重新加载
+					alert(response.msg);
+					$scope.entity={};
+					editor.html('');
 				}else{
-					alert(response.message);
+					alert(response.msg);
 				}
 			}		
 		);				
@@ -76,5 +81,24 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService){
 			}			
 		);
 	}
-    
+    //图片上传
+	$scope.upload=function () {
+		uploadService.upload().success(function (response) {
+			if(response.success){
+				$scope.imageEntity.url=response.msg;
+				alert(response.msg)
+			}else {
+				alert(response.msg);
+			}
+
+        })
+    }
+    //图片保存
+	$scope.saveImg=function () {
+		$scope.entity.goodsDesc.itemImages.push($scope.imageEntity)
+    }
+    //从图片列表中删除图片
+	$scope.delImg=function (index) {
+		$scope.entity.goodsDesc.itemImages.splice(index,1);
+    }
 });	

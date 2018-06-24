@@ -47,7 +47,9 @@ public class SellerServiceImpl implements SellerService {
 	 */
 	@Override
 	public void add(TbSeller seller) {
-		sellerMapper.insert(seller);		
+        System.out.println(seller.getNickName());
+		seller.setStatus("0");
+		sellerMapper.insert(seller);
 	}
 
 	
@@ -65,8 +67,9 @@ public class SellerServiceImpl implements SellerService {
 	 * @return
 	 */
 	@Override
-	public TbSeller findOne(Long id){
-		return sellerMapper.selectByPrimaryKey(id.toString());
+	public TbSeller findOne(String id){
+		System.out.println(id);
+		return sellerMapper.selectByPrimaryKey(id);
 	}
 
 	/**

@@ -3,6 +3,7 @@ import java.util.List;
 
 import com.pinyougou.pojo.TbSeller;
 import com.pinyougou.sellergoods.service.SellerService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,7 +49,12 @@ public class SellerController {
 	 */
 	@RequestMapping("/add")
 	public Result add(@RequestBody TbSeller seller){
+		//密码加密
+		BCryptPasswordEncoder bCryptPasswordEncoder= new BCryptPasswordEncoder();
+		String encode = bCryptPasswordEncoder.encode(seller.getPassword());
+		seller.setPassword(encode);
 		try {
+
 			sellerService.add(seller);
 			return new Result(true, "增加成功");
 		} catch (Exception e) {
@@ -75,12 +81,15 @@ public class SellerController {
 	
 	/**
 	 * 获取实体
-	 * @param id
+	 * @param sellerId
 	 * @return
 	 */
 	@RequestMapping("/findOne")
-	public TbSeller findOne(Long id){
-		return sellerService.findOne(id);		
+	public TbSeller findOne(String sellerId){
+		System.out.println(sellerId);
+		TbSeller one = sellerService.findOne(sellerId);
+		System.out.println(one);
+		return one;
 	}
 	
 	/**
@@ -110,5 +119,5 @@ public class SellerController {
 	public PageResult search(@RequestBody TbSeller seller, int page, int rows  ){
 		return sellerService.findPage(seller, page, rows);		
 	}
-	
+
 }

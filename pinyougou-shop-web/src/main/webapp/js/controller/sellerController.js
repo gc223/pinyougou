@@ -1,5 +1,5 @@
  //控制层 
-app.controller('sellerController' ,function($scope,$controller   ,sellerService){	
+app.controller('sellerController' ,function($scope,$controller,sellerService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -32,12 +32,12 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 	}
 	
 	//保存 
-	$scope.save=function(){				
-		var serviceObject;//服务层对象  				
-		if($scope.entity.id!=null){//如果有ID
-			serviceObject=sellerService.update( $scope.entity ); //修改  
-		}else{
-			serviceObject=sellerService.add( $scope.entity  );//增加 
+	$scope.save=function(){
+		var serviceObject;//服务层对象
+        if($scope.entity.id!=null){//如果有ID
+			serviceObject=sellerService.update( $scope.entity ); //修改
+        }else{
+            serviceObject=sellerService.add( $scope.entity  );//增加
 		}				
 		serviceObject.success(
 			function(response){
@@ -76,5 +76,15 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 			}			
 		);
 	}
+	$scope.add=function () {
+		// alert($scope.entity.name)
+		sellerService.add($scope.entity).success(function (response) {
+			if(response.success){
+				location.href="shoplogin.html"
+			}else{
+				alert(response.msg);
+			}
+        })
+    }
     
 });	

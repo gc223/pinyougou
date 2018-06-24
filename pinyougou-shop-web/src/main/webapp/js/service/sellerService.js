@@ -15,6 +15,8 @@ app.service('sellerService',function($http){
 	}
 	//增加 
 	this.add=function(entity){
+		alert(entity.nickName)
+		alert(entity.password)
 		return  $http.post('../seller/add.do',entity );
 	}
 	//修改 
